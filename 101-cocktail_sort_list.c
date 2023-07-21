@@ -5,10 +5,13 @@
  * @it1: the fist it
  * @it2: the second it
  * @list: the list
+ * @head: the head
+ * @tail: the tail
  *
  * Return: 1 or 0
  */
-int swap_list(listint_t *it1, listint_t *it2, listint_t **list)
+int swap_list(listint_t *it1, listint_t *it2, listint_t **list,
+				listint_t **head, listint_t **tail)
 {
 	if (it1->n <= it2->n)
 		return (0);
@@ -18,6 +21,10 @@ int swap_list(listint_t *it1, listint_t *it2, listint_t **list)
 		it1->prev->next = it2;
 	else
 		*list = it2;
+	if (it2 == *tail)
+		*tail = it1;
+	if (it1 == *head)
+		*head = it2;
 	it1->next = it2->next;
 	it2->next = it1;
 	it2->prev = it1->prev;
@@ -33,26 +40,33 @@ int swap_list(listint_t *it1, listint_t *it2, listint_t **list)
 void cocktail_sort_list(listint_t **list)
 {
 	int swapped = 1;
-	listint_t *it, *tail;
+	listint_t *head = *list, *tail = *list, *it;
 
 	if (!list || !*list || !(*list)->next)
 		return;
+	while (tail->next)
+		tail = tail->next;
 	while (swapped)
 	{
 		swapped = 0;
-		for (it = (*list)->next; it; it = it->next)
+		it = head->next;
+		while (it != tail->next)
 		{
-			if (swap_list(it->prev, it, list))
+			if (swap_list(it->prev, it, list, &head, &tail))
 				swapped = 1;
-			tail = it;
+			it = it->next;
 		}
 		if (!swapped)
 			break;
 		swapped = 0;
-		for (it = tail->prev; it; it = it->prev)
+		tail = tail->prev;
+		it = tail->prev;
+		while (it != head->prev)
 		{
-			if (swap_list(it, it->next, list))
+			if (swap_list(it, it->next, list, &head, &tail))
 				swapped = 1;
+			it = it->prev;
 		}
+		head = head->next;
 	}
 }
