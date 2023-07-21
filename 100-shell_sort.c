@@ -7,7 +7,8 @@
  */
 void shell_sort(int *array, size_t size)
 {
-	size_t gap = 1, i, j, tmp;
+	size_t gap = 1, i, j;
+	int tmp;
 
 	while (gap < size / 3)
 		gap = gap * 3 + 1;
