@@ -46,7 +46,7 @@ void cocktail_sort_list(listint_t **list)
 		return;
 	while (tail->next)
 		tail = tail->next;
-	while (swapped)
+	while (swapped == 1)
 	{
 		swapped = 0;
 		for (it = head->next; it != tail->next; it = it->next)
@@ -54,7 +54,7 @@ void cocktail_sort_list(listint_t **list)
 			if (swap_list(it->prev, it, list, &head, &tail))
 				swapped = 1;
 		}
-		if (!swapped)
+		if (swapped == 0)
 			break;
 		swapped = 0;
 		tail = tail->prev;
