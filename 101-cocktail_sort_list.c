@@ -48,6 +48,7 @@ void cocktail_sort_list(listint_t **list)
 		}
 		if (!swapped)
 			break;
+		swapped = 0;
 		for (it = tail->prev; it; it = it->prev)
 		{
 			if (swap_list(it, it->next, list))
