@@ -1,34 +1,27 @@
 #include "sort.h"
 
 /**
- * swap_list - swaps 2 its
- * @it1: the fist it
- * @it2: the second it
+ * swap_list - swaps 2 nodes
+ * @node1: the fist node
+ * @node2: the second node
  * @list: the list
- * @head: the head
- * @tail: the tail
  *
  * Return: 1 or 0
  */
-int swap_list(listint_t *it1, listint_t *it2, listint_t **list,
-				listint_t **head, listint_t **tail)
+int swap_list(listint_t *node1, listint_t *node2, listint_t **list)
 {
-	if (it1->n <= it2->n)
+	if (node1->n <= node2->n)
 		return (0);
-	if (it2->next)
-		it2->next->prev = it1;
-	if (it1->prev)
-		it1->prev->next = it2;
-	else
-		*list = it2;
-	if (it2 == *tail)
-		*tail = it1;
-	if (it1 == *head)
-		*head = it2;
-	it1->next = it2->next;
-	it2->next = it1;
-	it2->prev = it1->prev;
-	it1->prev = it2;
+	node1->next = node2->next;
+		if (node2->next)
+			node2->next->prev = node1;
+		node2->next = node1;
+		node2->prev = node1->prev;
+		node1->prev = node2;
+		if (node2->prev)
+			node2->prev->next = node2;
+		else
+			*list = node2;
 	print_list(*list);
 	return (1);
 }
@@ -39,34 +32,39 @@ int swap_list(listint_t *it1, listint_t *it2, listint_t **list,
  */
 void cocktail_sort_list(listint_t **list)
 {
-	int swapped = 1;
-	listint_t *head = *list, *tail = *list, *it;
+	int swapped = 1, end = -1, start = 0, i;
+	listint_t *node = *list;
 
-	while (tail->next)
-		tail = tail->next;
+	if (!list || !(*list) || !((*list)->next))
+		return;
+	while (node)
+	{
+		end++;
+		node = node->next;
+	}
+	node = *list;
 	while (swapped)
 	{
 		swapped = 0;
-		it = head;
-		while (it != tail)
+		for (i = start; i < end; i++)
 		{
-			if (swap_list(it, it->next, list, &head, &tail))
+			if (swap_list(node, node->next, list))
 				swapped = 1;
 			else
-				it = it->next;
+				node = node->next;
 		}
 		if (!swapped--)
 			break;
-		swapped = 0;
-		tail = tail->prev;
-		it = tail;
-		while (it != head)
+		end--;
+		node = node->prev;
+		for (i = end; i > start; i--)
 		{
-			if (swap_list(it->prev, it, list, &head, &tail))
+			if (swap_list(node->prev, node, list))
 				swapped = 1;
 			else
-				it = it->prev;
+				node = node->prev;
 		}
-		head = head->next;
+		start++;
+		node = node->next;
 	}
 }
