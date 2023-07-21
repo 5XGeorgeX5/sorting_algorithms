@@ -1,55 +1,61 @@
 #include "sort.h"
 
 /**
- * swap_list - swaps 2 its
- * @it1: the fist it
- * @it2: the second it
- * @list: the list
- *
- * Return: 1 or 0
+ * node_swapper - swaps 2 nodes of a doubly linked list
+ * @node1: first node in order, about to become second
+ * @node2: second node inorder, about to become first
+ * @list: list where the nodes exist in
  */
-int swap_list(listint_t *it1, listint_t *it2, listint_t **list)
+void node_swapper(listint_t *node1, listint_t *node2, listint_t **list)
 {
-	if (it1->n <= it2->n)
-		return (0);
-	if (it2->next)
-		it2->next->prev = it1;
-	if (it1->prev)
-		it1->prev->next = it2;
-	else
-		*list = it2;
-	it1->next = it2->next;
-	it2->next = it1;
-	it2->prev = it1->prev;
-	it1->prev = it2;
-	print_list(*list);
-	return (1);
+    if (node1->prev != NULL)
+        node1->prev->next = node2;
+    else
+        *list = node2;
+    if (node2->next != NULL)
+        node2->next->prev = node1;
+    node1->next = node2->next;
+    node2->prev = node1->prev;
+    node1->prev = node2;
+    node2->next = node1;
 }
 
 /**
- * cocktail_sort_list - sorts a linked list Cocktail shaker sort algorithm
- * @list: the list
+ * cocktail_sort_list - sorts a doubly list of integers in ascending order
+ * using the Cocktail shaker sort algorithm
+ * @list: list to be sorted
  */
 void cocktail_sort_list(listint_t **list)
 {
-	int swapped = 1;
-	listint_t *it, *tail;
+    int sorted = 0;
+    listint_t *node, *tail;
 
-	while (swapped)
-	{
-		swapped = 0;
-		for (it = (*list)->next; it; it = it->next)
-		{
-			if (swap_list(it->prev, it, list))
-				swapped = 1;
-			tail = it;
-		}
-		if (!swapped)
-			break;
-		for (it = tail->prev; it; it = it->prev)
-		{
-			if (swap_list(it, it->next, list))
-				swapped = 1;
-		}
-	}
+    if (!list || !*list || !(*list)->next)
+        return;
+    while (!sorted)
+    {
+        sorted = 1;
+        for (node = (*list)->next; node; node = node->next)
+        {
+            if (node->n < node->prev->n)
+            {
+                node_swapper(node->prev, node, list);
+                print_list(*list);
+                sorted = 0;
+            }
+            tail = node;
+        }
+        if (sorted)
+            break;
+        for (node = tail->prev; node; node = node->prev)
+        {
+            if (node->n > node->next->n)
+            {
+                node_swapper(node, node->next, list);
+                print_list(*list);
+                sorted = 0;
+            }
+
+        }
+    }
 }
