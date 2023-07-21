@@ -33,19 +33,18 @@ int swap_list(listint_t *it1, listint_t *it2, listint_t **list)
 void cocktail_sort_list(listint_t **list)
 {
 	int swapped = 1;
-	listint_t *tail = *list, *it;
+	listint_t *tail, *it;
 
 	if (!list || !*list || !(*list)->next)
 		return;
-	while (tail->next)
-		tail = tail->next;
-	while (swapped)
+	while(swapped)
 	{
 		swapped = 0;
 		for (it = (*list)->next; it; it = it->next)
 		{
 			if (swap_list(it->prev, it, list))
 				swapped = 1;
+			tail = it;
 		}
 		if (!swapped)
 			break;
