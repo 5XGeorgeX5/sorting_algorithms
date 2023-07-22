@@ -53,10 +53,12 @@ void heap_sort(int *array, size_t size)
 {
 	int i;
 
+	if (!array || size < 2)
+		return;
 	for (i = size / 2 - 1; i >= 0; i--)
 		heapify(array, size, size, i);
 
-	for (i = size - 1; i >= 0; i--)
+	for (i = size - 1; i > 0; i--)
 	{
 		if (array[0] != array[i])
 		{
