@@ -9,11 +9,8 @@ void swap(int *a, int *b)
 {
 	int tmp = *a;
 
-	if (*a != *b)
-	{
-		*a = *b;
-		*b = tmp;
-	}
+	*a = *b;
+	*b = tmp;
 }
 
 /**
@@ -60,11 +57,8 @@ void heap_sort(int *array, size_t size)
 
 	for (i = size - 1; i > 0; i--)
 	{
-		if (array[0] != array[i])
-		{
-			swap(&array[0], &array[i]);
-			print_array(array, size);
-			heapify(array, size, i, 0);
-		}
+		swap(&array[0], &array[i]);
+		print_array(array, size);
+		heapify(array, size, i, 0);
 	}
 }
